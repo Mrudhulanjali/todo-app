@@ -1,0 +1,26 @@
+
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Welcome, {{ session['username'] }}</h2>
+<a href="{{ url_for('task.add_task') }}">Add New Task</a> |
+<a href="{{ url_for('auth.logout') }}">Logout</a>
+
+<h3>Your Tasks</h3>
+<ul>
+    {% for task in tasks %}
+    <li>
+        <strong>{{ task.title }}</strong>
+        ({{ task.category }}) - Due: {{ task.due_date.strftime('%Y-%m-%d') }}
+        {% if task.done %}
+            ✅ Completed
+        {% else %}
+            <a href="{{ url_for('task.complete_task', task_id=task._id|string) }}">Mark as Done</a>
+        {% endif %}
+        | <a href="{{ url_for('task.delete_task', task_id=task._id|string) }}">Delete</a>
+    </li>
+    {% else %}
+    <p>No tasks yet. Add one!</p>
+    {% endfor %}
+</ul>
+{% endblock %}
